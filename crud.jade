@@ -1,0 +1,24 @@
+
+- schema = model.schema
+- schema.filled = typeof(values._id) !== 'undefined'
+
+
+form(action='../', method='post', class=model.modelName)
+  if schema.filled
+    input(type='hidden', name='method', value='_put')
+
+  //- Loop through schema.paths and output corresponding form-elemenets
+
+  each prop, path in schema.paths
+    className = model.modelName + ' ' + model.modelName + '-' + path
+    if path == '_id'
+      input(type='hidden', name=path, value=values[path] || null)
+    if prop.instance == 'String'
+      label(for=path)= path
+      input(class=className,id=path, type='text', name=path, value=values[path] || null)
+
+  //- Submit
+
+  className = model.modelName + ' ' + model.modelName + '-submit'
+  input(class=className, type='submit', value=schema.filled ? 'Update' : 'Add')
+
